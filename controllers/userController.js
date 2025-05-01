@@ -4,6 +4,7 @@ import Job from '../model/JobModel.js';
 import User from "../model/UserModel.js";
 import cloudinary from 'cloudinary';
 import {promises as fs} from 'fs';
+import { formatImage } from "../middleware/multerMiddleware.js";
 
 export const getCurrentUser = async(req, res) => {
 
@@ -32,9 +33,13 @@ export const updateUser = async(req, res) => {
 
     //check whether the user has sent a file
     if(req.file){
+        //Format the image to be sent to cloudinary
+        const file = formatImage(req.file);
+
         const response = await cloudinary.v2.uploader.upload(req.file.path);
         //If the image is uploaded successfully to cloudinary, remove it in anyother place i.e. uploads folder
-        await fs.unlink(req.file.path); 
+        //We are commenting it - because we no longer use disk storage
+        //await fs.unlink(req.file.path); 
 
         //From the response, set user's avatar and avatarPublicId
         newUser.avatar = response.secure_url;
