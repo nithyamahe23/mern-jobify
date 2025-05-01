@@ -27,6 +27,7 @@ export const updateUser = async(req, res) => {
     console.log('in update user');
     //delete the password associated with request
     let newUser = {...req.body};    //spread the properties of request  
+    console.log(newUser);
     delete newUser.password;
     //get the user associated with the id
     //const updatedUser = await User.findByIdAndUpdate(req.user.userId, req.body);
@@ -36,7 +37,7 @@ export const updateUser = async(req, res) => {
         //Format the image to be sent to cloudinary
         const file = formatImage(req.file);
 
-        const response = await cloudinary.v2.uploader.upload(req.file.path);
+        const response = await cloudinary.v2.uploader.upload(file);
         //If the image is uploaded successfully to cloudinary, remove it in anyother place i.e. uploads folder
         //We are commenting it - because we no longer use disk storage
         //await fs.unlink(req.file.path); 
